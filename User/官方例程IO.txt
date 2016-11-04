@@ -1,0 +1,81 @@
+C8能够提供的IO：
+PA0-15
+PB0-15
+PC13-15
+***********************************************************************************
+官方例程IO配置：
+
+LED：
+GPIOA 12
+
+Key：
+GPIOA 15
+
+ADC：
+GPIOA 4
+
+IIC：
+GPIOB 8 9
+
+USART3：
+GPIOB 10 11
+
+Timer：
+
+超声波测距：
+控制输出：	GPIOB 1
+定时器输入：Timer3：GPIOB 0
+
+电机转向控制：
+AIN2:GPIOB 15
+AIN1:GPIOB 14
+BIN1:GPIOB 13
+BIN2:GPIOB 12
+电机PWM输出：
+Timer1：CH1：GPIOA	8	
+Timer1：CH4：GPIOA	11	
+
+编码器输入：
+Timer2：GPIOA 0 1
+Timer4：GPIOB 6 7
+
+**************************************************************************
+
+USART1 TX PA9
+	   RX PA10
+
+USART2 TX PA2
+	   Rx PA3
+
+USART3 TX PB10
+	   RX PB11
+	   
+Soft_IIC PB8
+		 PB9
+
+输出
+Timer3 CH3 PB0 
+	   CH4 PB1
+
+输入	
+Timer1 CH1 PA8
+Timer3 CH1 PA6
+
+延时
+Timer4
+
+系统时间
+Timer2
+
+电机控制
+PA1
+PA2
+PA3
+PA4
+
+LED：
+GPIOC 13
+
+Key：
+GPIOA 0
+

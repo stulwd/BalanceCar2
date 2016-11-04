@@ -1,0 +1,153 @@
+////************************************************************************************************
+////								Ó²¼şÇı¶¯
+////************************************************************************************************
+
+
+#define MPU6050_SLAVE_ADDRESS 0xD0	//AD0½ÓµÍ
+////#define MPU6050_SLAVE_ADDRESS 0xD2	//AD0½Ó¸ß
+
+///**
+//  * @brief   Ğ´Ò»¸ö×Ö½Úµ½MPU6050ÖĞ
+//  *		@arg pBuffer:	1ByteĞÅÏ¢
+//  *		@arg WriteAddr:	Ğ´µØÖ· 
+//  */
+//void I2C_MPU6050_ByteWrite(u8 pBuffer, u8 WriteAddr)
+//{
+//	I2C_GenerateSTART(I2C1, ENABLE);	//Ğ´ÆğÊ¼ĞÅºÅ Send STRAT condition 
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));	//¼ì²âI2CÍâÉèÊÂ¼ş EV5 ²¢Çå³ı¸ÃÊÂ¼ş 
+//																//³É¹¦·¢ËÍÆğÊ¼ĞÅºÅºó»á²úÉúĞÅºÅEV5
+//	I2C_Send7bitAddress(I2C1, MPU6050_SLAVE_ADDRESS, I2C_Direction_Transmitter);	//ÏòI2C×ÜÏßÉÏ·¢ËÍÒªĞ´ÈëĞÅÏ¢µÄÉè±¸µØÖ·
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));	//·¢ËÍÍêI2CÉè±¸Ñ°Ö·²¢µÃµ½Ó¦´ğºó ²úÉúEV6
+//	I2C_SendData(I2C1, WriteAddr);	//·¢ËÍMPU6050ÖĞÄ¿±ê¼Ä´æÆ÷µØÖ·
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));	//¼ì²é·¢ËÍ³É¹¦ÊÂ¼ş
+//	I2C_SendData(I2C1, pBuffer); 	//·¢ËÍÒªĞ´ÈëµÄÊı¾İ£¨1×Ö½Ú£©
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));	//¼ì²é·¢ËÍ³É¹¦ÊÂ¼ş
+//	I2C_GenerateSTOP(I2C1, ENABLE);	//·¢ËÍÍ£Ö¹ĞÅºÅ
+//}
+
+
+///**
+//  * @brief   ´ÓMPU6050ÀïÃæ¶ÁÈ¡ n Byte Êı¾İ
+//  *		@arg pBuffer:´æ·Å´ÓMPU6050¶ÁÈ¡µÄÊı¾İµÄ»º³åÇøÖ¸Õë£¨Êı×éÊ×µØÖ·£©
+//  *		@arg WriteAddr:MPU6050ÖĞÄ¿±êÊı¾İ´æ·ÅµÄµØÖ·
+//  *     @arg NumByteToWrite:Òª´ÓMPU6050¶ÁÈ¡µÄ×Ö½ÚÊı
+//  *     
+//  *     ÆäÊµ°¡£¬Õâ¸öº¯ÊıÊÇ´ÓEEPROMÄÇÀï¸Ä¹ıÀ´µÄ£¬ÓµÓĞ¶ÁÈ¡n¸ö×Ö½ÚµÄÄÜÁ¦£¬µ«MPU6050µÄ¼Ä´æÆ÷ÆÕ±éÖ»ÓĞ1×Ö½Ú
+//  *     ×Ö½ÚÊıÄÇÀïÆ½Ê±¾ÍÊÇĞ´1£¬È»ºó»º³åÇøÖ¸Õë¾ÍÊÇÒ»¸ö±äÁ¿£¨int£©½øĞĞÈ¡µØÖ·
+//  */
+//void I2C_MPU6050_BufferRead(u8* pBuffer, u8 ReadAddr, u16 NumByteToRead)
+//{  
+//	//¶ÁÈ¡¹ı³ÌÓ¦¸ÃÊÇÕâÑùµÄ£ºÏÈÓÃĞ´µÄ·½Ê½£¬°ÑÒª¶ÁÈ¡µÄµØÖ·Ğ´½øÈ¥£¬È»ºóÔÙÓÃ¶ÁµÄ·½Ê½½ÓÊÕ¶ÔÃæµÄĞÅÏ¢¡£
+//	//ĞÅÏ¢½ÓÊÕÍê±ÏºóÖ÷¶¯Í£Ö¹Í¨Ñ¶
+//	
+//	while(I2C_GetFlagStatus(I2C1, I2C_FLAG_BUSY)); 	//¼ì²âSDAÊÇ·ñ¿ÕÏĞ£¨Ó¦¸ÃÊÇÎªÁËÊÊÓ¦¶àÖ÷»úÍ¨ĞÅ£©
+//													//Added by Najoua 27/08/2008    
+//	
+//	I2C_GenerateSTART(I2C1, ENABLE);	//·¢ËÍÆäÊµĞÅºÅ Send START condition */
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));	//¼ì²éÆğÊ¼ĞÅºÅµÄ»ØÓ¦
+//	I2C_Send7bitAddress(I2C1, MPU6050_SLAVE_ADDRESS, I2C_Direction_Transmitter);	//·¢ËÍMPU6050µØÖ·
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
+//	I2C_Cmd(I2C1, ENABLE);	/* Clear EV6 by setting again the PE bit */
+//	I2C_SendData(I2C1, ReadAddr);	//·¢ËÍÒª¶ÁÈ¡µÄ¼Ä´æÆ÷µÄµØÖ·
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));	//¼ì²éÊÇ·ñ·¢ËÍ³É¹¦
+//  
+//	I2C_GenerateSTART(I2C1, ENABLE);	//ÖØĞÂ·¢ËÍÆğÊ¼ĞÅºÅ
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_MODE_SELECT));	//¼ì²éÆğÊ¼ĞÅºÅ·´À¡
+//	I2C_Send7bitAddress(I2C1, MPU6050_SLAVE_ADDRESS, I2C_Direction_Receiver);	//·¢ËÍMPU6050µØÖ·£¬Í¬Ê±±íÊ¾²ÉÓÃ¶ÁµÄ¹¤×÷·½Ê½
+//	while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));	//¼ì²é·´À¡
+
+//	while(NumByteToRead)  // While there is data to be read ÔÙÑ­»·Àï¶ÁÊı¾İ
+//	{
+//		//Ïàµ±ÓÚËµ£¬ÔÚ½ÓÊÜÍêµ¹ÊıµÚ¶ş¸ö×Ö½Úºó£¬Ö÷»úµÄI2C_ReceiveDataº¯Êı·¢³öÁË½ÓÊÜ³É¹¦Ó¦´ğ£¬È»ºó´Ó»ú·¢³öÁË×îºóÒ»¸ö×Ö½Ú£
+//		//È»ºóÖ÷»ú½ô½Ó×Å¹Ø±ÕÁË×îºóÒ»¸ö×Ö½ÚµÄ½ÓÊÕ³É¹¦·´À¡£¬Ö±½Ó·¢ËÍÁËÍ¨ĞÅ½áÊø±êÖ¾
+//		//Ö»ÄÜÈÏÎªÊÇÔÚ½ÓÊÕµ½µ¹ÊıµÚ¶ş×Ö½ÚµÄÓ¦´ğ³É¹¦ĞÅºÅºó£¬´Ó»úÁ¢¼´·¢ËÍÁË×îºóÒ»¸ö×Ö½Ú£¬ÕâÊ±Í£Ö¹ĞÅºÅ»¹Ã»·¢¹ıÀ´¡£
+//		//Ò²¾ÍÊÇËµÔÚÖ÷»ú½ÓÊÕµ½×îºóÒ»¸ö×Ö½ÚµÄÒ»Ë²¼ä£¨Ó²¼ş×Ô¶¯½ÓÊÕ£©£¬Ö÷»úÈí¼ş·¢ËÍÁËÍ£Ö¹ÃüÁî¡£
+//		//·¢ÍêÍ£Ö¹ÃüÁîºó£¬Ö÷»ú²ÅÈ¥¼ì²é×îºóÒ»¸ö×Ö½ÚÊÕµ½ÁËÊ²Ã´£¨ÊÕÃ»ÊÕµ½£©
+//		if(NumByteToRead == 1)
+//		{
+//			/* Disable Acknowledgement */
+//			I2C_AcknowledgeConfig(I2C1, DISABLE);
+
+//			/* Send STOP Condition */
+//			I2C_GenerateSTOP(I2C1, ENABLE);
+//		}
+
+//		/* Test on EV7 and clear it */
+//		if(I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_RECEIVED))  
+//		{      
+//			/* Read a byte from the EEPROM */
+//			*pBuffer = I2C_ReceiveData(I2C1);	//°ÑÊı¾İ´æ½ø´æ´¢Çø
+
+//			/* Point to the next location where the byte read will be saved */
+//			pBuffer++; //Ö¸ÕëÖ¸ÏòÏÂÒ»¸ö´æ´¢¿Õ¼ä£¨Êı×éÏÂÒ»Î»£©
+
+//			/* Decrement the read bytes counter */
+//			NumByteToRead--;        
+//		}   
+//  }
+
+//  /* Enable Acknowledgement to be ready for another reception */
+//  I2C_AcknowledgeConfig(I2C1, ENABLE);	//»Ö¸´I2CµÄ×Ô¶¯Ó¦´ğ
+//}
+
+
+
+///**************************ÊµÏÖº¯Êı********************************************
+//*º¯ÊıÔ­ĞÍ:		u8 IICwriteBit(u8 dev, u8 reg, u8 bitNum, u8 data)
+//*¹¦¡¡¡¡ÄÜ:	  ¶Á ĞŞ¸Ä Ğ´ Ö¸¶¨Éè±¸ Ö¸¶¨¼Ä´æÆ÷Ò»¸ö×Ö½Ú ÖĞµÄ1¸öÎ»
+//ÊäÈë	dev  Ä¿±êÉè±¸µØÖ·
+//reg	   ¼Ä´æÆ÷µØÖ·
+//bitNum  ÒªĞŞ¸ÄÄ¿±ê×Ö½ÚµÄbitNumÎ»
+//data  Îª0 Ê±£¬Ä¿±êÎ»½«±»Çå0 ·ñÔò½«±»ÖÃÎ»
+//·µ»Ø   ³É¹¦ Îª1 
+//Ê§°ÜÎª0
+//*******************************************************************************/ 
+//void IICwriteBit(u8 dev, u8 reg, u8 bitNum, u8 data){
+//	u8 b;
+//	Delay_Us(100);
+//	IIC_Read_nByte(dev, reg, 1, &b);
+//	b = (data != 0) ? (b | (1 << bitNum)) : (b & ~(1 << bitNum));
+//	mpu6050_ok = !( IIC_Write_1Byte(dev, reg, b) );	//IIC_Write_1ByteÕı³£Çé¿ö·µ»Ø0£¬¾­¹ıÈ¥·´mpu6050_ok = 1
+//}
+
+///**************************ÊµÏÖº¯Êı********************************************
+//*º¯ÊıÔ­ĞÍ:		u8 IICwriteBits(u8 dev,u8 reg,u8 bitStart,u8 length,u8 data)
+//*¹¦¡¡¡¡ÄÜ:	    ¶Á ĞŞ¸Ä Ğ´ Ö¸¶¨Éè±¸ Ö¸¶¨¼Ä´æÆ÷Ò»¸ö×Ö½Ú ÖĞµÄ¶à¸öÎ»
+//ÊäÈë	dev  Ä¿±êÉè±¸µØÖ·
+//reg	   ¼Ä´æÆ÷µØÖ·
+//bitStart  Ä¿±ê×Ö½ÚµÄÆğÊ¼Î»
+//length   Î»³¤¶È
+//data    ´æ·Å¸Ä±äÄ¿±ê×Ö½ÚÎ»µÄÖµ
+//·µ»Ø   ³É¹¦ Îª1 
+//Ê§°ÜÎª0
+//*******************************************************************************/ 
+//void IICwriteBits(u8 dev,u8 reg,u8 bitStart,u8 length,u8 data)
+//{
+//	
+//	u8 b,mask;
+//	IIC_Read_nByte(dev, reg, 1, &b);
+//	mask = (0xFF << (bitStart + 1)) | 0xFF >> ((8 - bitStart) + length - 1);
+//	data <<= (8 - length);
+//	data >>= (7 - bitStart);
+//	b &= mask;
+//	b |= data;
+//	IIC_Write_1Byte(dev, reg, b);
+//}
+
+
+//#define MPU6050_SLAVE_ADDRESS		0xd0      //MPU6050Æ÷¼ş¶ÁµØÖ·  ¶¨ÒåÔÚbsp_mpu6050.cÀïÃæ
+//#define MPU6050_SLAVE_ADDRESS		0x68
+
+
+
+
+//#define MPU6050_ADDRESS_AD0_LOW     0x68 // address pin low (GND), default for InvenSense evaluation board
+//#define MPU6050_ADDRESS_AD0_HIGH    0x69 // address pin high (VCC)
+//#define MPU6050_DEFAULT_ADDRESS     MPU6050_ADDRESS_AD0_LOW
+
+
+
+//void MPU6050ReadAcc(mpu6050_3D *accData);
+//void MPU6050ReadGyro(mpu6050_3D *gyroData);
+//void MPU6050ReadTemp(short *tempData);
+//void MPU6050_ReturnTemp(short*Temperature);

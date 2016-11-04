@@ -1,33 +1,22 @@
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
+# Keil5环境下STM32F103忽略文件
+# 移植自https://github.com/github/gitignore/blob/master/C.gitignore和keilkill.bat
+*.bak
+*.ddk
+*.edk 
+*.lst 
+*.lnp 
+*.mpf 
+*.mpj 
+*.obj 
+*.omf 
+*.plg 
+*.rpt 
+*.tmp 
+*.__i 
+*.crf 
+*.o 
+*.d 
+*.axf 
+*.tra 
+*.dep            
+JLinkLog.txt 
